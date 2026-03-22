@@ -11,7 +11,13 @@ import {
     LineChart,
     ArrowRight,
     Menu,
-    X
+    X,
+    MessageCircle,
+    Heart,
+    Send,
+    User,
+    MoreHorizontal,
+    Repeat2
 } from 'lucide-react';
 
 // --- MOCK DATA ---
@@ -42,6 +48,69 @@ const SNIPPETS = [
         python: 'import random\n[random.randint(0, 100) for _ in range(10)]',
         q: '10?100'
     }
+];
+
+const SEED_POSTS = [
+    {
+        id: 1,
+        author: 'QuantDev42',
+        handle: '@quantdev42',
+        avatar: '🧑‍💻',
+        content: 'Just discovered that `aj` (as-of join) in q can replace 50+ lines of SQL window functions. My mind is blown. 🤯 This language is criminally underrated.',
+        timestamp: '2h ago',
+        likes: 24,
+        replies: 5,
+        reposts: 3,
+        liked: false
+    },
+    {
+        id: 2,
+        author: 'DataEngineer',
+        handle: '@data_eng_sarah',
+        avatar: '👩‍🔬',
+        content: 'Hot take: once you learn to read right-to-left evaluation in q, every other language starts feeling painfully verbose. `select avg price by sym from trade where date=.z.d` — chef\'s kiss.',
+        timestamp: '4h ago',
+        likes: 42,
+        replies: 12,
+        reposts: 8,
+        liked: false
+    },
+    {
+        id: 3,
+        author: 'KDBNewbie',
+        handle: '@kdb_learner',
+        avatar: '🐣',
+        content: 'Day 3 of learning q. I typed `10?100` and got 10 random numbers. In Python that\'s `import random; [random.randint(0,100) for _ in range(10)]`. Why did nobody tell me about this earlier?',
+        timestamp: '6h ago',
+        likes: 67,
+        replies: 8,
+        reposts: 15,
+        liked: false
+    },
+    {
+        id: 4,
+        author: 'TimeSeriesGuru',
+        handle: '@ts_guru',
+        avatar: '📈',
+        content: 'Built a tick data capture system in q today. The entire feedhandler + logging + historical database persistence fits in ~40 lines. Try doing that in Java. 😂',
+        timestamp: '8h ago',
+        likes: 31,
+        replies: 4,
+        reposts: 6,
+        liked: false
+    },
+    {
+        id: 5,
+        author: 'FinTechAlice',
+        handle: '@fintech_alice',
+        avatar: '🚀',
+        content: 'Tip for q beginners: the kx documentation at code.kx.com is excellent but dense. This site\'s curriculum breaks things down really well. Start with atoms & lists, then tackle tables.',
+        timestamp: '12h ago',
+        likes: 53,
+        replies: 7,
+        reposts: 11,
+        liked: false
+    },
 ];
 
 // --- COMPONENTS ---
@@ -112,11 +181,190 @@ const TerminalMock = () => {
     );
 };
 
+const ForumComposer = ({ onPost }) => {
+    const [text, setText] = useState('');
+    const [isFocused, setIsFocused] = useState(false);
+    const maxLength = 280;
+
+    const handleSubmit = () => {
+        if (text.trim().length === 0) return;
+        onPost(text.trim());
+        setText('');
+        setIsFocused(false);
+    };
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+            handleSubmit();
+        }
+    };
+
+    const charPercent = (text.length / maxLength) * 100;
+    const isOverLimit = text.length > maxLength;
+
+    return (
+        <div className={`rounded-2xl bg-slate-900/60 border transition-all duration-300 ${
+            isFocused ? 'border-emerald-500/40 shadow-[0_0_30px_rgba(16,185,129,0.08)]' : 'border-slate-800'
+        }`}>
+            <div className="p-5">
+                <div className="flex gap-4">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center text-slate-950 flex-shrink-0 shadow-lg">
+                        <User size={22} />
+                    </div>
+                    <div className="flex-1">
+                        <textarea
+                            value={text}
+                            onChange={(e) => setText(e.target.value)}
+                            onFocus={() => setIsFocused(true)}
+                            onBlur={() => text.length === 0 && setIsFocused(false)}
+                            onKeyDown={handleKeyDown}
+                            placeholder="Share your q insights, ask a question, or flex your one-liners..."
+                            className="w-full bg-transparent text-slate-200 placeholder-slate-600 resize-none outline-none text-base leading-relaxed min-h-[60px]"
+                            rows={isFocused ? 3 : 2}
+                            maxLength={300}
+                        />
+                    </div>
+                </div>
+            </div>
+            {(isFocused || text.length > 0) && (
+                <div className="px-5 pb-4 flex items-center justify-between border-t border-slate-800/50 pt-3">
+                    <div className="flex items-center gap-3">
+                        <div className="relative w-8 h-8">
+                            <svg className="w-8 h-8 -rotate-90" viewBox="0 0 36 36">
+                                <circle cx="18" cy="18" r="14" fill="none" stroke="currentColor" strokeWidth="2" className="text-slate-800" />
+                                <circle
+                                    cx="18" cy="18" r="14" fill="none" strokeWidth="2"
+                                    strokeDasharray={`${Math.min(charPercent, 100) * 0.88} 88`}
+                                    className={isOverLimit ? 'stroke-rose-500' : charPercent > 80 ? 'stroke-amber-400' : 'stroke-emerald-400'}
+                                    strokeLinecap="round"
+                                />
+                            </svg>
+                        </div>
+                        <span className={`text-xs font-mono ${isOverLimit ? 'text-rose-400' : 'text-slate-500'}`}>
+                            {text.length}/{maxLength}
+                        </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <span className="text-xs text-slate-600 hidden sm:inline">Ctrl+Enter to post</span>
+                        <button
+                            onClick={handleSubmit}
+                            disabled={text.trim().length === 0 || isOverLimit}
+                            className={`px-5 py-2 rounded-full text-sm font-semibold flex items-center gap-2 transition-all duration-200 ${
+                                text.trim().length > 0 && !isOverLimit
+                                    ? 'bg-emerald-500 text-slate-950 hover:bg-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.5)]'
+                                    : 'bg-slate-800 text-slate-600 cursor-not-allowed'
+                            }`}
+                        >
+                            <Send size={14} />
+                            Post
+                        </button>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
+const ForumPost = ({ post, onLike }) => {
+    const [isHovered, setIsHovered] = useState(false);
+
+    return (
+        <div
+            className="group relative p-5 rounded-2xl bg-slate-900/30 border border-slate-800 hover:bg-slate-900/50 hover:border-slate-700 transition-all duration-300 cursor-pointer"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+        >
+            <div className="flex gap-4">
+                {/* Avatar */}
+                <div className="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center text-2xl flex-shrink-0 border border-slate-700 group-hover:border-slate-600 transition-colors">
+                    {post.avatar}
+                </div>
+
+                {/* Content */}
+                <div className="flex-1 min-w-0">
+                    {/* Header */}
+                    <div className="flex items-center justify-between gap-2 mb-1">
+                        <div className="flex items-center gap-2 min-w-0">
+                            <span className="font-semibold text-white truncate">{post.author}</span>
+                            <span className="text-slate-500 text-sm truncate">{post.handle}</span>
+                            <span className="text-slate-600">·</span>
+                            <span className="text-slate-500 text-sm flex-shrink-0">{post.timestamp}</span>
+                        </div>
+                        <button className="text-slate-600 hover:text-slate-400 transition-colors opacity-0 group-hover:opacity-100">
+                            <MoreHorizontal size={18} />
+                        </button>
+                    </div>
+
+                    {/* Body Text */}
+                    <p className="text-slate-300 leading-relaxed mb-4 whitespace-pre-wrap">{post.content}</p>
+
+                    {/* Action Bar */}
+                    <div className="flex items-center gap-1 -ml-2">
+                        {/* Reply */}
+                        <button className="flex items-center gap-2 px-3 py-1.5 rounded-full text-slate-500 hover:text-cyan-400 hover:bg-cyan-400/10 transition-all text-sm group/btn">
+                            <MessageCircle size={16} className="group-hover/btn:scale-110 transition-transform" />
+                            <span className="font-medium">{post.replies}</span>
+                        </button>
+
+                        {/* Repost */}
+                        <button className="flex items-center gap-2 px-3 py-1.5 rounded-full text-slate-500 hover:text-emerald-400 hover:bg-emerald-400/10 transition-all text-sm group/btn">
+                            <Repeat2 size={16} className="group-hover/btn:scale-110 transition-transform" />
+                            <span className="font-medium">{post.reposts}</span>
+                        </button>
+
+                        {/* Like */}
+                        <button
+                            onClick={(e) => { e.stopPropagation(); onLike(post.id); }}
+                            className={`flex items-center gap-2 px-3 py-1.5 rounded-full transition-all text-sm group/btn ${
+                                post.liked
+                                    ? 'text-rose-400'
+                                    : 'text-slate-500 hover:text-rose-400 hover:bg-rose-400/10'
+                            }`}
+                        >
+                            <Heart
+                                size={16}
+                                fill={post.liked ? 'currentColor' : 'none'}
+                                className={`group-hover/btn:scale-110 transition-transform ${post.liked ? 'animate-[heartBeat_0.3s_ease-in-out]' : ''}`}
+                            />
+                            <span className="font-medium">{post.likes}</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 // --- MAIN APPLICATION ---
 
 export default function App() {
     const [activeTab, setActiveTab] = useState('home');
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [forumPosts, setForumPosts] = useState(SEED_POSTS);
+
+    const handleNewPost = (content) => {
+        const newPost = {
+            id: Date.now(),
+            author: 'You',
+            handle: '@anonymous',
+            avatar: '✨',
+            content,
+            timestamp: 'just now',
+            likes: 0,
+            replies: 0,
+            reposts: 0,
+            liked: false
+        };
+        setForumPosts(prev => [newPost, ...prev]);
+    };
+
+    const handleLike = (postId) => {
+        setForumPosts(prev => prev.map(post =>
+            post.id === postId
+                ? { ...post, liked: !post.liked, likes: post.liked ? post.likes - 1 : post.likes + 1 }
+                : post
+        ));
+    };
 
     const navigate = (tab) => {
         setActiveTab(tab);
@@ -162,6 +410,13 @@ export default function App() {
                             >
                                 q vs The World
                             </button>
+                            <button
+                                onClick={() => navigate('forum')}
+                                className={`text-sm font-medium transition-colors hover:text-emerald-400 flex items-center gap-1.5 ${activeTab === 'forum' ? 'text-emerald-400' : 'text-slate-400'}`}
+                            >
+                                <MessageCircle size={15} />
+                                Forum
+                            </button>
                         </div>
 
                         {/* CTA Button */}
@@ -203,6 +458,12 @@ export default function App() {
                             className={`block w-full text-left px-3 py-2 rounded-md text-base font-medium ${activeTab === 'snippets' ? 'bg-slate-800 text-emerald-400' : 'text-slate-300 hover:bg-slate-800'}`}
                         >
                             q vs The World
+                        </button>
+                        <button
+                            onClick={() => navigate('forum')}
+                            className={`block w-full text-left px-3 py-2 rounded-md text-base font-medium ${activeTab === 'forum' ? 'bg-slate-800 text-emerald-400' : 'text-slate-300 hover:bg-slate-800'}`}
+                        >
+                            💬 Forum
                         </button>
                     </div>
                 )}
@@ -363,6 +624,55 @@ export default function App() {
                                     </div>
                                 </div>
                             ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* FORUM VIEW */}
+                {activeTab === 'forum' && (
+                    <div className="max-w-2xl mx-auto animate-in slide-in-from-bottom-4 duration-500">
+                        {/* Header */}
+                        <div className="mb-8">
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+                                    <MessageCircle size={20} className="text-emerald-400" />
+                                </div>
+                                <div>
+                                    <h2 className="text-3xl font-bold text-white">Forum</h2>
+                                </div>
+                            </div>
+                            <p className="text-slate-400 text-base">
+                                Share tips, ask questions, or show off your most elegant q one-liners. Be nice — we're all learning. ✌️
+                            </p>
+                        </div>
+
+                        {/* Composer */}
+                        <div className="mb-8">
+                            <ForumComposer onPost={handleNewPost} />
+                        </div>
+
+                        {/* Divider */}
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="flex-1 h-px bg-slate-800"></div>
+                            <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">
+                                {forumPosts.length} post{forumPosts.length !== 1 ? 's' : ''}
+                            </span>
+                            <div className="flex-1 h-px bg-slate-800"></div>
+                        </div>
+
+                        {/* Feed */}
+                        <div className="space-y-3">
+                            {forumPosts.map((post) => (
+                                <ForumPost key={post.id} post={post} onLike={handleLike} />
+                            ))}
+                        </div>
+
+                        {/* End of Feed */}
+                        <div className="text-center py-12">
+                            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900/50 border border-slate-800 text-slate-500 text-sm">
+                                <Terminal size={14} />
+                                You've reached the end — go write some q!
+                            </div>
                         </div>
                     </div>
                 )}
