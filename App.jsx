@@ -53,8 +53,8 @@ const SNIPPETS = [
 const SEED_POSTS = [
     {
         id: 1,
-        author: 'QuantDev42',
-        handle: '@quantdev42',
+        author: 'dev001',
+        handle: '@dev001',
         avatar: '🧑‍💻',
         content: 'Just discovered that `aj` (as-of join) in q can replace 50+ lines of SQL window functions. My mind is blown. 🤯 This language is criminally underrated.',
         timestamp: '2h ago',
@@ -65,8 +65,8 @@ const SEED_POSTS = [
     },
     {
         id: 2,
-        author: 'DataEngineer',
-        handle: '@data_eng_sarah',
+        author: 'dev002',
+        handle: '@dev002',
         avatar: '👩‍🔬',
         content: 'Hot take: once you learn to read right-to-left evaluation in q, every other language starts feeling painfully verbose. `select avg price by sym from trade where date=.z.d` — chef\'s kiss.',
         timestamp: '4h ago',
@@ -77,8 +77,8 @@ const SEED_POSTS = [
     },
     {
         id: 3,
-        author: 'KDBNewbie',
-        handle: '@kdb_learner',
+        author: 'dev003',
+        handle: '@dev003',
         avatar: '🐣',
         content: 'Day 3 of learning q. I typed `10?100` and got 10 random numbers. In Python that\'s `import random; [random.randint(0,100) for _ in range(10)]`. Why did nobody tell me about this earlier?',
         timestamp: '6h ago',
@@ -89,8 +89,8 @@ const SEED_POSTS = [
     },
     {
         id: 4,
-        author: 'TimeSeriesGuru',
-        handle: '@ts_guru',
+        author: 'dev004',
+        handle: '@dev004',
         avatar: '📈',
         content: 'Built a tick data capture system in q today. The entire feedhandler + logging + historical database persistence fits in ~40 lines. Try doing that in Java. 😂',
         timestamp: '8h ago',
@@ -101,8 +101,8 @@ const SEED_POSTS = [
     },
     {
         id: 5,
-        author: 'FinTechAlice',
-        handle: '@fintech_alice',
+        author: 'dev005',
+        handle: '@dev005',
         avatar: '🚀',
         content: 'Tip for q beginners: the kx documentation at code.kx.com is excellent but dense. This site\'s curriculum breaks things down really well. Start with atoms & lists, then tackle tables.',
         timestamp: '12h ago',
@@ -203,9 +203,8 @@ const ForumComposer = ({ onPost }) => {
     const isOverLimit = text.length > maxLength;
 
     return (
-        <div className={`rounded-2xl bg-slate-900/60 border transition-all duration-300 ${
-            isFocused ? 'border-emerald-500/40 shadow-[0_0_30px_rgba(16,185,129,0.08)]' : 'border-slate-800'
-        }`}>
+        <div className={`rounded-2xl bg-slate-900/60 border transition-all duration-300 ${isFocused ? 'border-emerald-500/40 shadow-[0_0_30px_rgba(16,185,129,0.08)]' : 'border-slate-800'
+            }`}>
             <div className="p-5">
                 <div className="flex gap-4">
                     <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center text-slate-950 flex-shrink-0 shadow-lg">
@@ -249,11 +248,10 @@ const ForumComposer = ({ onPost }) => {
                         <button
                             onClick={handleSubmit}
                             disabled={text.trim().length === 0 || isOverLimit}
-                            className={`px-5 py-2 rounded-full text-sm font-semibold flex items-center gap-2 transition-all duration-200 ${
-                                text.trim().length > 0 && !isOverLimit
+                            className={`px-5 py-2 rounded-full text-sm font-semibold flex items-center gap-2 transition-all duration-200 ${text.trim().length > 0 && !isOverLimit
                                     ? 'bg-emerald-500 text-slate-950 hover:bg-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.5)]'
                                     : 'bg-slate-800 text-slate-600 cursor-not-allowed'
-                            }`}
+                                }`}
                         >
                             <Send size={14} />
                             Post
@@ -315,11 +313,10 @@ const ForumPost = ({ post, onLike }) => {
                         {/* Like */}
                         <button
                             onClick={(e) => { e.stopPropagation(); onLike(post.id); }}
-                            className={`flex items-center gap-2 px-3 py-1.5 rounded-full transition-all text-sm group/btn ${
-                                post.liked
+                            className={`flex items-center gap-2 px-3 py-1.5 rounded-full transition-all text-sm group/btn ${post.liked
                                     ? 'text-rose-400'
                                     : 'text-slate-500 hover:text-rose-400 hover:bg-rose-400/10'
-                            }`}
+                                }`}
                         >
                             <Heart
                                 size={16}
@@ -551,8 +548,8 @@ export default function App() {
                                             <div className="flex space-x-3 text-xs font-medium text-slate-500">
                                                 <span className="px-2 py-1 rounded-md bg-slate-950 border border-slate-800">{lesson.time}</span>
                                                 <span className={`px-2 py-1 rounded-md border ${lesson.level === 'Beginner' ? 'text-blue-400 border-blue-400/20 bg-blue-400/10' :
-                                                        lesson.level === 'Intermediate' ? 'text-amber-400 border-amber-400/20 bg-amber-400/10' :
-                                                            'text-rose-400 border-rose-400/20 bg-rose-400/10'
+                                                    lesson.level === 'Intermediate' ? 'text-amber-400 border-amber-400/20 bg-amber-400/10' :
+                                                        'text-rose-400 border-rose-400/20 bg-rose-400/10'
                                                     }`}>
                                                     {lesson.level}
                                                 </span>
