@@ -17,8 +17,35 @@ import {
     Send,
     User,
     MoreHorizontal,
-    Repeat2
+    Repeat2,
+    Lightbulb,
+    Trophy,
+    HelpCircle
 } from 'lucide-react';
+
+// Custom animations for a 'premium' feel
+const CustomStyles = () => (
+    <style>{`
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        .animate-shake {
+            animation: shake 0.2s ease-in-out 0s 2;
+        }
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            14% { transform: scale(1.3); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.3); }
+            70% { transform: scale(1); }
+        }
+        .animate-heart-beat {
+            animation: heartBeat 0.5s ease-in-out;
+        }
+    `}</style>
+);
 
 // --- MOCK DATA ---
 const LESSONS = [
@@ -332,6 +359,108 @@ const ForumPost = ({ post, onLike }) => {
     );
 };
 
+const DailyPuzzle = () => {
+    const [answer, setAnswer] = useState('');
+    const [isCorrect, setIsCorrect] = useState(false);
+    const [showHint, setShowHint] = useState(false);
+    const [shake, setShake] = useState(false);
+
+    const puzzle = {
+        question: "Reverse the list `1 2 3 4 5` using the most concise q operator.",
+        solution: "reverse 1 2 3 4 5",
+        hint: "In q, most functions are exactly what they sound like. Think of the opposite of 'forward'.",
+        explanation: "The `reverse` function in q reverses the order of elements in a list. You could also use `DESC` if it was sorted, but `reverse` is the general-purpose way."
+    };
+
+    const handleCheck = () => {
+        if (answer.trim().toLowerCase() === puzzle.solution.toLowerCase() || 
+            answer.trim().toLowerCase() === "reverse 1 2 3 4 5".toLowerCase()) {
+            setIsCorrect(true);
+            setShake(false);
+        } else {
+            setShake(true);
+            setTimeout(() => setShake(false), 500);
+        }
+    };
+
+    return (
+        <section className="py-12 border-t border-slate-800">
+            <div className="max-w-3xl mx-auto">
+                <div className="flex items-center gap-3 mb-8 justify-center lg:justify-start">
+                    <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
+                        <Lightbulb size={20} className="text-amber-400" />
+                    </div>
+                    <h2 className="text-3xl font-bold text-white">Daily q Puzzle</h2>
+                </div>
+
+                <div className={`relative p-8 rounded-3xl bg-slate-900/40 border transition-all duration-300 ${
+                    isCorrect ? 'border-emerald-500/50 bg-emerald-500/5 shadow-[0_0_40px_rgba(16,185,129,0.1)]' : 
+                    shake ? 'border-rose-500/50 animate-shake' : 'border-slate-800'
+                }`}>
+                    {!isCorrect ? (
+                        <div className="space-y-6">
+                            <p className="text-xl text-slate-200 leading-relaxed font-medium">
+                                {puzzle.question}
+                            </p>
+                            
+                            <div className="relative">
+                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-500 font-mono font-bold">q)</span>
+                                <input 
+                                    type="text"
+                                    value={answer}
+                                    onChange={(e) => setAnswer(e.target.value)}
+                                    placeholder="Type your solution..."
+                                    className="w-full bg-slate-950 border border-slate-800 rounded-xl py-4 pl-12 pr-4 text-emerald-400 font-mono focus:outline-none focus:border-emerald-500/50 transition-all shadow-inner"
+                                    onKeyDown={(e) => e.key === 'Enter' && handleCheck()}
+                                />
+                            </div>
+
+                            <div className="flex flex-col sm:flex-row items-center gap-4">
+                                <button 
+                                    onClick={handleCheck}
+                                    className="w-full sm:w-auto px-8 py-3 rounded-xl bg-emerald-500 text-slate-950 font-bold hover:bg-emerald-400 transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)]"
+                                >
+                                    Check Answer
+                                </button>
+                                <button 
+                                    onClick={() => setShowHint(!showHint)}
+                                    className="w-full sm:w-auto px-6 py-3 rounded-xl bg-slate-800 text-slate-300 font-medium hover:bg-slate-700 transition-all flex items-center justify-center gap-2"
+                                >
+                                    <HelpCircle size={18} />
+                                    {showHint ? 'Hide Hint' : 'Need a Hint?'}
+                                </button>
+                            </div>
+
+                            {showHint && (
+                                <div className="p-4 rounded-xl bg-amber-500/5 border border-amber-500/10 text-amber-200/80 text-sm animate-in fade-in slide-in-from-top-2">
+                                    <strong>Hint:</strong> {puzzle.hint}
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        <div className="text-center py-4 animate-in zoom-in-95 duration-500">
+                            <div className="w-20 h-20 rounded-full bg-emerald-500/20 flex items-center justify-center mx-auto mb-6 border border-emerald-500/30">
+                                <Trophy size={40} className="text-emerald-400 animate-bounce" />
+                            </div>
+                            <h3 className="text-2xl font-bold text-white mb-2">Excellent!</h3>
+                            <p className="text-emerald-400/80 font-mono mb-6">q) {puzzle.solution}</p>
+                            <div className="p-6 rounded-2xl bg-slate-950/50 border border-emerald-500/10 text-slate-400 text-sm leading-relaxed max-w-xl mx-auto">
+                                {puzzle.explanation}
+                            </div>
+                            <button 
+                                onClick={() => { setIsCorrect(false); setAnswer(''); setShowHint(false); }}
+                                className="mt-8 text-slate-500 hover:text-emerald-400 text-sm font-medium transition-colors"
+                            >
+                                Try another one (coming soon)
+                            </button>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </section>
+    );
+};
+
 // --- MAIN APPLICATION ---
 
 export default function App() {
@@ -371,6 +500,7 @@ export default function App() {
 
     return (
         <div className="min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-emerald-500/30">
+            <CustomStyles />
 
             {/* NAVIGATION */}
             <nav className="fixed w-full z-50 bg-slate-950/80 backdrop-blur-md border-b border-slate-800">
@@ -523,6 +653,9 @@ export default function App() {
                                 ))}
                             </div>
                         </section>
+
+                        {/* Daily Puzzle Section */}
+                        <DailyPuzzle />
                     </div>
                 )}
 
