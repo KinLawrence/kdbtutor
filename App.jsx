@@ -276,8 +276,8 @@ const ForumComposer = ({ onPost }) => {
                             onClick={handleSubmit}
                             disabled={text.trim().length === 0 || isOverLimit}
                             className={`px-5 py-2 rounded-full text-sm font-semibold flex items-center gap-2 transition-all duration-200 ${text.trim().length > 0 && !isOverLimit
-                                    ? 'bg-emerald-500 text-slate-950 hover:bg-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.5)]'
-                                    : 'bg-slate-800 text-slate-600 cursor-not-allowed'
+                                ? 'bg-emerald-500 text-slate-950 hover:bg-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.5)]'
+                                : 'bg-slate-800 text-slate-600 cursor-not-allowed'
                                 }`}
                         >
                             <Send size={14} />
@@ -341,8 +341,8 @@ const ForumPost = ({ post, onLike }) => {
                         <button
                             onClick={(e) => { e.stopPropagation(); onLike(post.id); }}
                             className={`flex items-center gap-2 px-3 py-1.5 rounded-full transition-all text-sm group/btn ${post.liked
-                                    ? 'text-rose-400'
-                                    : 'text-slate-500 hover:text-rose-400 hover:bg-rose-400/10'
+                                ? 'text-rose-400'
+                                : 'text-slate-500 hover:text-rose-400 hover:bg-rose-400/10'
                                 }`}
                         >
                             <Heart
@@ -373,7 +373,7 @@ const DailyPuzzle = () => {
     };
 
     const handleCheck = () => {
-        if (answer.trim().toLowerCase() === puzzle.solution.toLowerCase() || 
+        if (answer.trim().toLowerCase() === puzzle.solution.toLowerCase() ||
             answer.trim().toLowerCase() === "reverse 1 2 3 4 5".toLowerCase()) {
             setIsCorrect(true);
             setShake(false);
@@ -393,19 +393,18 @@ const DailyPuzzle = () => {
                     <h2 className="text-3xl font-bold text-white">Daily q Puzzle</h2>
                 </div>
 
-                <div className={`relative p-8 rounded-3xl bg-slate-900/40 border transition-all duration-300 ${
-                    isCorrect ? 'border-emerald-500/50 bg-emerald-500/5 shadow-[0_0_40px_rgba(16,185,129,0.1)]' : 
+                <div className={`relative p-8 rounded-3xl bg-slate-900/40 border transition-all duration-300 ${isCorrect ? 'border-emerald-500/50 bg-emerald-500/5 shadow-[0_0_40px_rgba(16,185,129,0.1)]' :
                     shake ? 'border-rose-500/50 animate-shake' : 'border-slate-800'
-                }`}>
+                    }`}>
                     {!isCorrect ? (
                         <div className="space-y-6">
                             <p className="text-xl text-slate-200 leading-relaxed font-medium">
                                 {puzzle.question}
                             </p>
-                            
+
                             <div className="relative">
                                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-500 font-mono font-bold">q)</span>
-                                <input 
+                                <input
                                     type="text"
                                     value={answer}
                                     onChange={(e) => setAnswer(e.target.value)}
@@ -416,13 +415,13 @@ const DailyPuzzle = () => {
                             </div>
 
                             <div className="flex flex-col sm:flex-row items-center gap-4">
-                                <button 
+                                <button
                                     onClick={handleCheck}
                                     className="w-full sm:w-auto px-8 py-3 rounded-xl bg-emerald-500 text-slate-950 font-bold hover:bg-emerald-400 transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)]"
                                 >
                                     Check Answer
                                 </button>
-                                <button 
+                                <button
                                     onClick={() => setShowHint(!showHint)}
                                     className="w-full sm:w-auto px-6 py-3 rounded-xl bg-slate-800 text-slate-300 font-medium hover:bg-slate-700 transition-all flex items-center justify-center gap-2"
                                 >
@@ -447,7 +446,7 @@ const DailyPuzzle = () => {
                             <div className="p-6 rounded-2xl bg-slate-950/50 border border-emerald-500/10 text-slate-400 text-sm leading-relaxed max-w-xl mx-auto">
                                 {puzzle.explanation}
                             </div>
-                            <button 
+                            <button
                                 onClick={() => { setIsCorrect(false); setAnswer(''); setShowHint(false); }}
                                 className="mt-8 text-slate-500 hover:text-emerald-400 text-sm font-medium transition-colors"
                             >
@@ -607,7 +606,7 @@ export default function App() {
                             <div className="flex-1 space-y-8 text-center lg:text-left">
                                 <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-medium">
                                     <Zap size={16} />
-                                    <span>The language of Wall Street</span>
+                                    <span>The language of Wall Street - quantitative finance and market data engine</span>
                                 </div>
                                 <h1 className="text-5xl lg:text-7xl font-bold tracking-tight text-white leading-[1.1]">
                                     Master <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">kdb+/q</span> without the headache.
