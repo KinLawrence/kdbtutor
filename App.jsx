@@ -633,8 +633,8 @@ export default function App() {
                         {/* Features Section */}
                         <section className="py-12 border-t border-slate-800">
                             <div className="text-center mb-16">
-                                <h2 className="text-3xl font-bold text-white mb-4">Why learn q?</h2>
-                                <p className="text-slate-400">There is a reason the top hedge funds rely on it.</p>
+                                <h2 className="text-3xl font-bold text-white mb-4">Why learn kdb+/q?</h2>
+                                <p className="text-slate-400">There is a reason the top hedge funds, trading firms, investment managers and big banks rely on it.</p>
                             </div>
                             <div className="grid md:grid-cols-3 gap-8">
                                 {[
@@ -771,7 +771,7 @@ export default function App() {
                                 </div>
                             </div>
                             <p className="text-slate-400 text-base">
-                                Share tips, ask questions, or show off your most elegant q one-liners. Be nice — we're all learning. ✌️
+                                Share tips, ask questions, or show off your most elegant kdb+/q one-liners. Be nice — we're all learning. ✌️
                             </p>
                         </div>
 
