@@ -131,7 +131,7 @@ const SEED_POSTS = [
         author: 'dev005',
         handle: '@dev005',
         avatar: '🚀',
-        content: 'Tip for q beginners: the kx documentation at code.kx.com is excellent but dense. This site\'s curriculum breaks things down really well. Start with atoms & lists, then tackle tables.',
+        content: 'Tip for kdb+/q beginners: the Kx documentation at code.kx.com is excellent but dense. This site\'s curriculum breaks things down really well. Start with atoms & lists, then tackle tables.',
         timestamp: '12h ago',
         likes: 53,
         replies: 7,
@@ -719,7 +719,7 @@ export default function App() {
                         <div className="mb-12 text-center">
                             <h2 className="text-4xl font-bold text-white mb-4">q vs The World</h2>
                             <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-                                Yes, it looks like someone fell asleep on the keyboard. But once you understand it, you'll realize how verbose other languages are.
+                                Yes, it looks like someone fell asleep on the keyboard; but once you understand it, you'll realize how verbose other languages are.
                             </p>
                         </div>
 
